@@ -2,6 +2,7 @@ const { Socket } = require('dgram')
 const express = require('express')
 const app = express()
 const path = require('path')
+const fs = require('fs')
 const { Server: IOServer } = require('socket.io')
 const expressServer = app.listen(8080, () => { console.log('Servisdor conectado pueto 8080') })
 const io = new IOServer(expressServer)
@@ -23,6 +24,7 @@ io.on('connection', socket => {
         //Socket Mensajes
     socket.emit('server:mensajes', messagesArray)
     socket.on('client:menssage', messageInfo => {
+        fs.appendFileSync(`./Messages/appMensajes.txt`, JSON.stringify(messageInfo))
         messagesArray.push(messageInfo)
         io.emit('server:mensajes', messagesArray)
             //console.log(messageInfo)
